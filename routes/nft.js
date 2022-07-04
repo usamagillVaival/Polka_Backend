@@ -3,7 +3,7 @@ const {
  getAllNfts,
  createNFT
  
-} = require("../controllers/user");
+} = require("../controllers/nft");
 
 
 const router = express.Router();

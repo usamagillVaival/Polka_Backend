@@ -76,15 +76,15 @@ module.exports = ({ User, authHelper }) => {
 
   ) => {
     try {
-      // const approveUser = await getUserByEmail(email);
-      //    console.log('approve userrr',approveUser)
+      const approveUser = await getUserByEmail(email);
+         console.log('approve userrr',approveUser)
       
 
-      // if (approveUser) {
-      //   return res.status(200).json({
-      //     error: "This Email Already Exist ",
-      //   });
-      // }
+      if (approveUser) {
+        return res.status(200).json({
+          error: "This Email Already Exist ",
+        });
+      }
       
       
       const user = await createUser(
