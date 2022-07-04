@@ -24,6 +24,8 @@ module.exports = ({ User, authHelper }) => {
     name,
     email,
     password,
+    phoneNumber,
+     walletAddress,
     role,
     res
   ) {
@@ -31,11 +33,13 @@ module.exports = ({ User, authHelper }) => {
       name,
       email,
       password,
+      phoneNumber,
+     walletAddress,
       role,
       res
     });
     await user.save(async(err, user) => {
-
+    console.log('save')
       if (err) {
         console.log(err);
         return res.status(400).json({
@@ -65,6 +69,8 @@ module.exports = ({ User, authHelper }) => {
     name,
     email,
     password,
+    phoneNumber,
+     walletAddress,
     role,
     res
 
@@ -85,6 +91,8 @@ module.exports = ({ User, authHelper }) => {
         name,
         email,
         password,
+        phoneNumber,
+        walletAddress,
         role,
         res
     

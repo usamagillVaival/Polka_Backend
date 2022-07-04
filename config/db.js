@@ -10,7 +10,7 @@ const connectDB = async () => {
 
 
     const url = `
-    mongodb://localhost:27017`
+    mongodb+srv://usama:Usama123@cluster0.yfbmuyz.mongodb.net/?retryWrites=true&w=majority`
 
     let conn = await mongoose.connect(url, {
       useNewUrlParser: true,
