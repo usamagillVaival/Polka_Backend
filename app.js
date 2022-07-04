@@ -29,7 +29,7 @@ const userRoutes = require("./routes/user");
 // app.use("/api", authRoutes);
 app.use("/api", userRoutes);
     
-const port = 8001;
+const port = 8000;
 
 app.listen(port, () => {
   console.log(`Server is running on port ${port}`);
