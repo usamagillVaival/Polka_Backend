@@ -25,9 +25,10 @@ app.get('/', (req, res) => {
 
 // import routes
 const userRoutes = require("./routes/user");
-
+const nftRotes = require("./routes/nft")
 // app.use("/api", authRoutes);
 app.use("/api", userRoutes);
+app.use("/api", nftRotes);
     
 const port = 8000;
 

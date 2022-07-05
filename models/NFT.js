@@ -9,7 +9,7 @@ const nftSchema = new mongoose.Schema(
     amount_for_sale: { type: Number },
    
     userId: { type: String }, 
-    
+    status:{type:Number },
     mint_status: {
       type: String, 
       trim: true,
@@ -44,15 +44,6 @@ const nftSchema = new mongoose.Schema(
   
   },
   { timestamps: true }
-
-
-
-
-
-
-
-
-
 
 );
 module.exports = mongoose.model("nft", nftSchema);
