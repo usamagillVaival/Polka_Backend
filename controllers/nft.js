@@ -1,7 +1,14 @@
-const { user: userService } = require("../service");
 const NFT = require('../models/NFT')
+const User = require('../models/User')
+const {
+  toJson,
+} = require("../service/utils");
 
 
+async function getUserByEmail(email) {
+  const user = await User.findOne({ _id:email }, (err, user) => {});
+  return toJson(user);
+}
 exports.getAllNfts  = async (req, res) => {
   try {
 
@@ -38,6 +45,10 @@ exports.getAllNftsByUserId  = async (req, res) => {
 
     const userId = req.body.userId
 
+    const approveUser = await getUserByEmail(userId);
+    
+    console.log('approve userrr',approveUser)
+
     res.header( "Access-Control-Allow-Origin" );
 
     const nftDetails = await NFT.find({
@@ -47,6 +58,7 @@ exports.getAllNftsByUserId  = async (req, res) => {
     if (nftDetails) {
       return res.status(200).json({
         data: nftDetails,
+        walletAddress:approveUser.walletAddress
       });
     } else {
       return res.status(200).json({
