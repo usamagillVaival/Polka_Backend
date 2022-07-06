@@ -203,7 +203,7 @@ exports.createNFT = async (req, res) => {
 exports.uploadIPFS = async (req, res, next) => {
   
   const { title, description, imageurl } = req.body;
-
+  console.log(imageurl)
   let url = "";
 
   try {
