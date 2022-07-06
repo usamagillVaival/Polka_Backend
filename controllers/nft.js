@@ -64,6 +64,39 @@ exports.getAllNftsByUserId  = async (req, res) => {
 
 
 
+exports.viewProfile = (req, res) => {
+  try {
+    req.gfs.files.findOne({ filename: req.params.filename }, (err, file) => {
+      // Check if file
+      if (!file || file.length === 0) {
+        return res.status(404).json({
+          err: "No file exists",
+        });
+      }
+
+      // Check if image
+      // Read output to browser
+      const readstream = req.gfs.createReadStream(file.filename);
+      readstream.pipe(res);
+      //   res.json({ readstream });
+    });
+  } catch (ex) {
+    res.status(400).json({ error: "No file exists" });
+  }
+  //   const { payload } = req.body;
+  //   const {
+  //     name,
+  //     yearOfBirth,
+  //     nationality,
+  //     coverArt,
+  //     biography,
+  //     networkCategory,
+  //     links,
+  //   } = payload;
+};
+
+
+
 
 exports.createNFT = async (req, res) => {
   const { 
