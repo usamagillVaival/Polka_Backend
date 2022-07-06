@@ -12,7 +12,7 @@ const {
 const router = express.Router();
 
 router.post("/users/createNFT",upload.single("file"), createNFT);
-router.get("/users/getAllNFT", getAllNfts);
+router.post("/users/getNftByStatus", getAllNfts);
 
 
 module.exports = router;

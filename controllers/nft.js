@@ -4,11 +4,13 @@ const NFT = require('../models/NFT')
 
 exports.getAllNfts  = async (req, res) => {
   try {
+
+    const status = req.body.status
+
     res.header( "Access-Control-Allow-Origin" );
 
     const nftDetails = await NFT.find({
-      
-      
+      status :status      
     })
       .lean();
     if (nftDetails) {
@@ -16,12 +18,16 @@ exports.getAllNfts  = async (req, res) => {
         data: nftDetails,
       });
     } else {
-      throw "NFT not found";
+      return res.status(200).json({
+        data: [],
+      });
     }
 
     // throw "NFT not found";
   } catch (ex) {
-    throw "NFT not found";
+    return res.status(200).json({
+      error: ex,
+    });
   }
 };
 
@@ -76,6 +82,7 @@ exports.createNFT = async (req, res) => {
       price,
       amount_for_sale,
       userId, 
+      status:0
   
     });
     await nft.save(async(err, user) => {
