@@ -3,6 +3,12 @@ const User = require('../models/User')
 const {
   toJson,
 } = require("../service/utils");
+const { create, urlSource } = require("ipfs-http-client");
+
+const client = create("https://ipfs.infura.io:5001/api/v0");
+
+
+
 
 
 async function getUserByEmail(email) {
@@ -110,6 +116,8 @@ exports.viewProfile = (req, res) => {
 
 
 
+
+
 exports.createNFT = async (req, res) => {
   const { 
    
@@ -188,5 +196,41 @@ exports.createNFT = async (req, res) => {
 
  }
    
+};
+
+
+
+exports.uploadIPFS = async (req, res, next) => {
+  
+  const { title, description, imageurl } = req.body;
+
+  let url = "";
+
+  try {
+    const added = await client.add(urlSource(imageurl));
+    url = `https://ipfs.infura.io/ipfs/${added.cid}`;
+  } catch (error) {
+    console.log("Error uploading file: ", error);
+  }
+
+  // const cid = await ipfs.add({ content }, {
+  //   cidVersion: 1,
+  //   hashAlg: 'sha2-256'
+  // }
+
+  const data = JSON.stringify({
+    name: title,
+    description,
+    image: url,
+  });
+
+  try {
+    const added = await client.add(data);
+    const meta = `https://ipfs.infura.io/ipfs/${added.path}`;
+    console.log(meta);
+    res.json(meta);
+  } catch (error) {
+    console.log("Error uploading file: ", error);
+  }
 };
 
