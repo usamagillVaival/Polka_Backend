@@ -33,6 +33,36 @@ exports.getAllNfts  = async (req, res) => {
 
 
 
+exports.getAllNftsByUserId  = async (req, res) => {
+  try {
+
+    const userId = req.body.userId
+
+    res.header( "Access-Control-Allow-Origin" );
+
+    const nftDetails = await NFT.find({
+      userId      
+    })
+      .lean();
+    if (nftDetails) {
+      return res.status(200).json({
+        data: nftDetails,
+      });
+    } else {
+      return res.status(200).json({
+        data: [],
+      });
+    }
+
+    // throw "NFT not found";
+  } catch (ex) {
+    return res.status(200).json({
+      error: ex,
+    });
+  }
+};
+
+
 
 
 exports.createNFT = async (req, res) => {
