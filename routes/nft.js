@@ -8,7 +8,8 @@ const {
  getAllNfts,
  createNFT,
  getAllNftsByUserId,
- viewProfile
+ viewProfile,
+ uploadIPFS
  
 } = require("../controllers/nft");
 
@@ -32,6 +33,8 @@ router.post("/users/createNFT",upload.single("file"), createNFT);
 router.post("/users/getNftByStatus", getAllNfts);
 router.post("/users/getAllNftsByUserId", getAllNftsByUserId);
 router.get("/users/nft_image/:filename", addingGFS, viewProfile);
+router.get("/users/uploadIPFS", uploadIPFS);
+
 
 
 module.exports = router;
