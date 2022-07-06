@@ -33,7 +33,7 @@ router.post("/users/createNFT",upload.single("file"), createNFT);
 router.post("/users/getNftByStatus", getAllNfts);
 router.post("/users/getAllNftsByUserId", getAllNftsByUserId);
 router.get("/users/nft_image/:filename", addingGFS, viewProfile);
-router.get("/users/uploadIPFS", uploadIPFS);
+router.post("/users/uploadIPFS", uploadIPFS);
 
 
 
