@@ -11,7 +11,11 @@ const {
  viewProfile,
  uploadIPFS,
  getNfts,
+<<<<<<< HEAD
  approveNfts
+=======
+ insertMintHash
+>>>>>>> 0a4613ebfb451c4c9955a03d90f2cf89b0e5a840
  
 } = require("../controllers/nft");
 
@@ -40,7 +44,7 @@ router.post("/users/approveNfts", approveNfts);
 router.post("/users/getAllNftsByUserId", getAllNftsByUserId);
 router.get("/users/nft_image/:filename", addingGFS, viewProfile);
 router.post("/users/uploadIPFS", uploadIPFS);
-
+router.post("/users/InsertMintHash",insertMintHash);
 
 
 module.exports = router;

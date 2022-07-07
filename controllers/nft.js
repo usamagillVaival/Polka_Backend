@@ -293,3 +293,31 @@ exports.uploadIPFS = async (req, res, next) => {
   }
 };
 
+exports.insertMintHash = async (req, res, next) => {
+  console.log("call mint hash")
+  const { artId, hash } = req.body;
+  console.log("artId: ", artId);
+  console.log("hash: ", hash);
+
+  NFT.findOne({ _id: artId }, async (err, nft) => {
+    if (err || !nft) {
+      return res.status(400).json({
+        error: " not found",
+      });
+    }
+    if (nft) {
+      (nft.mint_status = "pending"), (nft.mint_hash = hash),
+      (nft.nft_mint_pending_date=new Date()),
+      (nft.status=2)
+    }
+    nft.save((err, updatedUser) => {
+      if (err) {
+        console.log("USER UPDATE ERROR", err);
+        return res.status(400).json({
+          error: "User update failed",
+        });
+      }
+      res.json(updatedUser);
+    });
+  });
+};

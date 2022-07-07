@@ -41,6 +41,14 @@ const nftSchema = new mongoose.Schema(
       type: String,
       trim: true,
     },
+    nft_mint_pending_date:{
+      type:Date,
+      trim:true
+    },
+    nft_mint_confirmed_data:{
+      type:Date,
+      trim:true
+    }
   
   },
   { timestamps: true }
