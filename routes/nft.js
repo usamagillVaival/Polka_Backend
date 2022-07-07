@@ -11,11 +11,8 @@ const {
  viewProfile,
  uploadIPFS,
  getNfts,
-<<<<<<< HEAD
- approveNfts
-=======
+ approveNfts,
  insertMintHash
->>>>>>> 0a4613ebfb451c4c9955a03d90f2cf89b0e5a840
  
 } = require("../controllers/nft");
 
