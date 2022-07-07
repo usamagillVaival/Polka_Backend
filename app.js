@@ -6,6 +6,14 @@ const cookieParser = require("cookie-parser");
 const cors = require("cors");
 const expressValidator = require("express-validator");
 require("dotenv").config();
+const {
+  mintjob
+  
+ } = require("./controllers/jobs");
+
+var cron = require('node-cron');
+
+
 
 
 // app
@@ -29,9 +37,13 @@ const nftRotes = require("./routes/nft")
 // app.use("/api", authRoutes);
 app.use("/api", userRoutes);
 app.use("/api", nftRotes);
-    
+cron.schedule('* * * * * *', () => {
+  mintjob()
+  console.log('running a task every minute');
+}); 
 const port = 8000;
 
 app.listen(port, () => {
   console.log(`Server is running on port ${port}`);
 });
+   
