@@ -4,8 +4,7 @@ var provider = process.env.HTTP_NODE;
 var web3Provider = new Web3.providers.HttpProvider(provider);
 var web3 = new Web3(web3Provider);
 exports.mintjob  = async () => {
-    console.log(provider)
-    console.log("hello")
+   
     NFT.find({
         mint_status: "pending",
     }).exec((err, data) => {
