@@ -15,6 +15,34 @@ async function getUserByEmail(email) {
   const user = await User.findOne({ _id:email }, (err, user) => {});
   return toJson(user);
 }
+
+exports.getNfts  = async (req, res) => {
+  try {
+
+
+    res.header( "Access-Control-Allow-Origin" );
+
+    const nftDetails = await NFT.find({
+            
+    })
+      .lean();
+    if (nftDetails) {
+      return res.status(200).json({
+        data: nftDetails,
+      });
+    } else {
+      return res.status(200).json({
+        data: [],
+      });
+    }
+
+    // throw "NFT not found";
+  } catch (ex) {
+    return res.status(200).json({
+      error: ex,
+    });
+  }
+};
 exports.getAllNfts  = async (req, res) => {
   try {
 
