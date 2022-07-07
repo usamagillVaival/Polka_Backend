@@ -40,14 +40,19 @@ exports.createAccount = async (req, res) => {
     name,
     email,
     password,
+    phoneNumber,
+     walletAddress,
     role,
     
    } = req.body;
+   console.log('cc')
   const result = await userService.createUser(
    
     name,
     email,
     password,
+    phoneNumber,
+     walletAddress,
     role,
     res
 
@@ -82,6 +87,8 @@ exports.login  = async (req, res) => {
 
     // throw "User not found";
   } catch (ex) {
-    throw "Voter not found";
+    return res.status(200).json({
+      error: ex,
+    });
   }
 };

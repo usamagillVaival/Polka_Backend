@@ -24,6 +24,8 @@ module.exports = ({ User, authHelper }) => {
     name,
     email,
     password,
+    phoneNumber,
+     walletAddress,
     role,
     res
   ) {
@@ -31,11 +33,13 @@ module.exports = ({ User, authHelper }) => {
       name,
       email,
       password,
+      phoneNumber,
+     walletAddress,
       role,
       res
     });
     await user.save(async(err, user) => {
-
+    console.log('save')
       if (err) {
         console.log(err);
         return res.status(400).json({
@@ -65,26 +69,30 @@ module.exports = ({ User, authHelper }) => {
     name,
     email,
     password,
+    phoneNumber,
+     walletAddress,
     role,
     res
 
   ) => {
     try {
-      // const approveUser = await getUserByEmail(email);
-      //    console.log('approve userrr',approveUser)
+      const approveUser = await getUserByEmail(email);
+         console.log('approve userrr',approveUser)
       
 
-      // if (approveUser) {
-      //   return res.status(200).json({
-      //     error: "This Email Already Exist ",
-      //   });
-      // }
+      if (approveUser) {
+        return res.status(200).json({
+          error: "This Email Already Exist ",
+        });
+      }
       
       
       const user = await createUser(
         name,
         email,
         password,
+        phoneNumber,
+        walletAddress,
         role,
         res
     

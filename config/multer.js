@@ -8,7 +8,7 @@ const { DATABASE } = process.env;
 
 var storage = new GridFsStorage({
   // url: DATABASE,
-  url: `mongodb://localhost:27017`,
+  url: `mongodb+srv://usama:Usama1122@cluster0.yfbmuyz.mongodb.net/?retryWrites=true&w=majority`,
   file: (req, file) => {
     return new Promise((resolve, reject) => {
       crypto.randomBytes(16, (err, buf) => {
