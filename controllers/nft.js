@@ -74,6 +74,37 @@ exports.getAllNfts  = async (req, res) => {
 
 
 
+exports.approveNfts  = async (req, res) => {
+  try {
+
+    const nftId = req.body.nftId
+
+    res.header( "Access-Control-Allow-Origin" );
+
+    NFT.updateOne(
+        { "_id": nftId}, // Filter
+        {"status": 1} // Update
+    )
+    .then((obj) => {
+        console.log('Updated - ' + obj);
+        return res.status(200).json({
+          data: [],
+        });
+    })
+    .catch((err) => {
+        console.log('Error: ' + err);
+    })
+
+    // throw "NFT not found";
+  } catch (ex) {
+    return res.status(200).json({
+      error: ex,
+    });
+  }
+};
+
+
+
 exports.getAllNftsByUserId  = async (req, res) => {
   try {
 
