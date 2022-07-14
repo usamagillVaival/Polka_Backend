@@ -12,6 +12,7 @@
   "dependencies": {
     "@sendgrid/client": "^7.6.0",
     "@sendgrid/mail": "^6.5.5",
+    "abi-decoder": "^2.4.0",
     "base64-img": "^1.0.4",
     "bcryptjs": "^2.4.3",
     "body-parser": "^1.19.1",

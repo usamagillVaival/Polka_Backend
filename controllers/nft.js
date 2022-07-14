@@ -1,5 +1,6 @@
 const NFT = require('../models/NFT')
 const User = require('../models/User')
+const ListedNft=require('../models/ListedNft')
 const {
   toJson,
 } = require("../service/utils");
@@ -290,3 +291,39 @@ exports.insertMintHash = async (req, res, next) => {
     });
   });
 };
+exports.insertListHash = async (req, res, next) => {
+  
+  console.log("call list hash")
+  const { artId, hash,token_id,listed_price } = req.body;
+  console.log("artId: ", artId);
+  console.log("hash: ", hash);
+  const check=await ListedNft.find({nft_id:artId,token_id:token_id})
+  if(check?.length>0)
+  {
+    return res.status(200).json({
+      error:"this token id already listed for sale"
+    })
+  }
+   const obj=new ListedNft({
+    list_status:"pending",
+    list_hash:hash,
+    list_pending_date:new Date(),
+    token_id:token_id,
+    nft_id:artId,
+    listed_price
+   })
+  obj.save((err,data)=>{
+    console.log(err)
+    console.log(data)
+  })
+};
+exports.getallidsofnft=async (req,res)=>{
+  // const {_id}=req.body
+  // const nftids = await NFT.find({
+  //   _id      
+  // })
+  //   .lean();
+  //  res.status(200).json{
+  //      ids:nftids[0]?.minted_ids[0]
+  //   }
+}

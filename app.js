@@ -7,7 +7,8 @@ const cors = require("cors");
 const expressValidator = require("express-validator");
 require("dotenv").config();
 const {
-  mintjob
+  mintjob,
+  listjob
   
  } = require("./controllers/jobs");
 
@@ -39,7 +40,8 @@ app.use("/api", userRoutes);
 app.use("/api", nftRotes);
 cron.schedule('* * * * * *', () => {
   mintjob()
-  console.log('running a task every minute');
+  listjob()
+  
 }); 
 const port = 8000;
 
