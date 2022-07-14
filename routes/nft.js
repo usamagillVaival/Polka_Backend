@@ -13,8 +13,8 @@ const {
  getNfts,
  insertMintHash,
  getallidsofnft,
- insertListHash
- 
+ insertListHash,
+ approveNfts
 } = require("../controllers/nft");
 
 let gfs;
@@ -36,6 +36,8 @@ const router = express.Router();
 router.post("/users/createNFT",upload.single("file"), createNFT);
 router.post("/users/getNftByStatus", getAllNfts);
 router.post("/users/getNfts", getNfts);
+router.post("/users/approveNfts", approveNfts);
+
 
 router.post("/users/getAllNftsByUserId", getAllNftsByUserId);
 router.get("/users/nft_image/:filename", addingGFS, viewProfile);
