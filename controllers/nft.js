@@ -17,6 +17,11 @@ async function getUserByEmail(email) {
   return toJson(user);
 }
 
+async function getNftLitedById(id) {
+  const user = await ListedNft.find({ nft_id:id }, (err, user) => {});
+  return toJson(user);
+}
+
 exports.getNfts  = async (req, res) => {
   try {
 
@@ -112,6 +117,7 @@ exports.getAllNftsByUserId  = async (req, res) => {
     const userId = req.body.userId
 
     const approveUser = await getUserByEmail(userId);
+    // const approveUser = await getUserByEmail(userId);
     
     console.log('approve userrr',approveUser)
 
@@ -122,12 +128,37 @@ exports.getAllNftsByUserId  = async (req, res) => {
     })
       .lean();
     if (nftDetails) {
-      return res.status(200).json({
-        data: nftDetails,
-        walletAddress:approveUser.walletAddress
-      });
+      let data=[];
+
+      const primises  =     nftDetails?.map(async(x)=>{
+                 
+            let list = await getNftLitedById(x?._id);
+            // console.log('list',list)
+                x['nftList'] = list
+           // console.log('list',x)
+            data.push(x);
+
+             return x
+
+           })
+           
+
+         await  Promise.all(primises)
+
+           console.log('data',data)
+           
+           return  res.status(200).json({
+            data,
+            walletAddress:approveUser.walletAddress
+          });
+      
+
+
+      //  console.log('list',list)
+
+     
     } else {
-      return res.status(200).json({
+    return res.status(200).json({
         data: [],
       });
     }
