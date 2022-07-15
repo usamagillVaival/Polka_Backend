@@ -14,7 +14,8 @@ const {
  insertMintHash,
  getallidsofnft,
  insertListHash,
- approveNfts
+ approveNfts,
+ insertListingStatus
 } = require("../controllers/nft");
 
 let gfs;
@@ -45,5 +46,6 @@ router.post("/users/uploadIPFS", uploadIPFS);
 router.post("/users/InsertMintHash",insertMintHash);
 router.post("/getallidsofnft",getallidsofnft)
 router.post("/users/insertListHash",insertListHash)
+router.post("/users/insertListingStatus",insertListingStatus)
 
 module.exports = router;

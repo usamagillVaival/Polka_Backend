@@ -5,9 +5,13 @@ var provider = process.env.HTTP_NODE;
 var web3Provider = new Web3.providers.HttpProvider(provider);
 var web3 = new Web3(web3Provider);
 var abi=require("../abis/abi.json")
+var marketplaceabi=require("../abis/marketplaceabi.json")
 const abiDecoder = require('abi-decoder');
+const abiDecoder1=require('abi-decoder')
 const { resolve } = require('path');
 abiDecoder.addABI(abi.abi);
+abiDecoder1.addABI(marketplaceabi.abi)
+
 
 exports.mintjob  = async () => {
    
@@ -26,8 +30,9 @@ exports.mintjob  = async () => {
             }
             if (receipt !== null && receipt !== undefined) {
               if (receipt.status == true) {
-                
+                console.log("logs"+ JSON.stringify(receipt))
                 const decodedLogs = abiDecoder.decodeLogs(receipt.logs);
+                console.log("decoded logs" + decodedLogs)
                 let arr=[]
                 for(var i=0;i<decodedLogs?.length;i++)
                 {
@@ -66,12 +71,13 @@ exports.mintjob  = async () => {
     });
 }
 exports.listjob  = async () => {
-   let arr=[]
+  
   ListedNft.find({
       list_status: "pending",
   }).exec((err, data) => {
     
     data?.map(async (x) => {
+      console.log(x)
       console.log("list job job running")
         let hash = x.list_hash;
         await web3.eth.getTransactionReceipt(hash, function (err, receipt) {
@@ -81,19 +87,24 @@ exports.listjob  = async () => {
           }
           if (receipt !== null && receipt !== undefined) {
             if (receipt.status == true) {
+              
+              const decodedLogs = abiDecoder1.decodeLogs(receipt.logs);
+              
+             x.index_hash=decodedLogs[0].events[1].value
               x.list_status="listed";
               x.list_confirm_date=new Date()
+              
               x.save((err, user) => {
                 if (err) {
                   console.log(err);
                 } else {
-                 console.log(data)
+                //  console.log(data)
                 }
               });
               
             }
              else if (receipt.status == false) {
-              x.status = "false";
+              x.list_status = "rejected";
               x.failed_transaction=true
               x.save((err, user) => {
                 if (err) {
@@ -104,11 +115,54 @@ exports.listjob  = async () => {
                });
              }
            } else {
-             console.log(`transaction ${x?.mint_hash} not processed yet.`);
+             console.log(`transaction ${x?.list_hash} not processed yet.`);
            }
          });
-         console.log("data isssss" + data)
-         console.log(arr)
+         
+        
+     });
+  });
+}
+exports.cancellisting  = async () => {
+  
+  ListedNft.find({
+    cancel_listing_status: "pending",
+  }).exec((err, data) => {
+    
+    data?.map(async (x) => {
+      console.log(x)
+      console.log("cancel listing  job running")
+        let hash = x.cancel_listing_hash;
+        await web3.eth.getTransactionReceipt(hash, function (err, receipt) {
+         
+          if (err) {
+            console.log(err);
+          }
+          if (receipt !== null && receipt !== undefined) {
+            if (receipt.status == true) {
+              
+              
+              x.delete((err,data)=>{
+                 if(err)
+                 console.log(err)
+              })
+              
+            }
+             else if (receipt.status == false) {
+              x.cancel_listing_status = "rejected";
+              x.save((err, user) => {
+                if (err) {
+                  console.log(err);
+                 } else {
+                   // console.log(user);
+                 }
+               });
+             }
+           } else {
+             console.log(`transaction ${x?.list_hash} not processed yet.`);
+           }
+         });
+         
         
      });
   });

@@ -141,8 +141,6 @@ exports.getAllNftsByUserId  = async (req, res) => {
              return x
 
            })
-           
-
          await  Promise.all(primises)
 
            console.log('data',data)
@@ -379,6 +377,20 @@ exports.insertListHash = async (req, res, next) => {
     console.log(data)
   })
 };
+exports.insertListingStatus=async(req,res)=>{
+const {id,hash}=req.body
+ListedNft.find({_id:id}).exec((err,data)=>{
+  data?.map(async(x)=>{
+    x.cancel_listing_status="pending",
+    x.cancel_listing_hash=hash
+    x.save((err,data)=>{
+      return res.status(200).json({
+        success:"done"
+      })
+    })
+  })
+})
+}
 exports.getallidsofnft=async (req,res)=>{
   // const {_id}=req.body
   // const nftids = await NFT.find({

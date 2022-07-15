@@ -29,7 +29,19 @@ const nftSchema = new mongoose.Schema(
     listed_price:{
         type:String,
         trim:true
-    }
+    },
+    index_hash:{
+      type:String,
+      trim:true
+  },
+  cancel_listing_status:{
+    type:String,
+    trim:true
+},
+cancel_listing_hash:{
+  type:String,
+  trim:true
+}
   },
   { timestamps: true }
 

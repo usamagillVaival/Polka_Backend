@@ -8,7 +8,8 @@ const expressValidator = require("express-validator");
 require("dotenv").config();
 const {
   mintjob,
-  listjob
+  listjob,
+  cancellisting
   
  } = require("./controllers/jobs");
 
@@ -41,6 +42,7 @@ app.use("/api", nftRotes);
 cron.schedule('* * * * * *', () => {
   mintjob()
   listjob()
+  cancellisting()
   
 }); 
 const port = 8000;
