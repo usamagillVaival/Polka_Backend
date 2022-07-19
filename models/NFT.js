@@ -53,26 +53,10 @@ const nftSchema = new mongoose.Schema(
       type:Array,
       trim:true
     },
-    listed_ids:{
-      type:Array,
-      trim:true
-    },
-    list_pending_date:{
-      type:Date,
-      trim:true
-    },
-    list_confirm_date:{
-      type:Date,
-      trim:true
-    },
-    list_status:{
-      type:String,
-      trim:true
-    },  
-    list_hash:{
-      type:String,
-      trim:true
-    },  
+   
+    
+    
+    
   },
   { timestamps: true }
 

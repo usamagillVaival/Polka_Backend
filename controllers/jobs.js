@@ -30,16 +30,17 @@ exports.mintjob  = async () => {
             }
             if (receipt !== null && receipt !== undefined) {
               if (receipt.status == true) {
-                console.log("logs"+ JSON.stringify(receipt))
+                
                 const decodedLogs = abiDecoder.decodeLogs(receipt.logs);
-                console.log("decoded logs" + decodedLogs)
+               
                 let arr=[]
                 for(var i=0;i<decodedLogs?.length;i++)
                 {
                      arr.push(decodedLogs[i]?.events[2]?.value)
                 }
+                console.log("minted id" + arr)
                 x.minted_ids.push(arr)
-                console.log(arr)
+                
                 x.status = 3;
                 x.mint_status="minted";
                 x.nft_mint_confirmed_data=new Date()
@@ -89,19 +90,23 @@ exports.listjob  = async () => {
             if (receipt.status == true) {
               
               const decodedLogs = abiDecoder1.decodeLogs(receipt.logs);
-              
-             x.index_hash=decodedLogs[0].events[1].value
-              x.list_status="listed";
-              x.list_confirm_date=new Date()
-              
-              x.save((err, user) => {
-                if (err) {
-                  console.log(err);
-                } else {
-                //  console.log(data)
-                }
-              });
-              
+              console.log("decoded logs" + decodedLogs[0].events[1].value)
+              if(decodedLogs[0].events[1].value)
+              {
+                x.index_hash=decodedLogs[0].events[1].value
+             
+                x.list_status="listed";
+                x.list_confirm_date=new Date()
+                
+                x.save((err, user) => {
+                  if (err) {
+                    console.log(err);
+                  } else {
+                  //  console.log(data)
+                  }
+                });  
+              }
+            
             }
              else if (receipt.status == false) {
               x.list_status = "rejected";

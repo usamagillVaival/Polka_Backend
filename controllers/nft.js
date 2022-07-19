@@ -17,8 +17,8 @@ async function getUserByEmail(email) {
   return toJson(user);
 }
 
-async function getNftLitedById(id) {
-  const user = await ListedNft.find({ nft_id:id }, (err, user) => {});
+async function getNftLitedById(id,userId) {
+  const user = await ListedNft.find({ nft_id:id,list_status:"listed",userId:userId }, (err, user) => {});
   return toJson(user);
 }
 
@@ -119,7 +119,7 @@ exports.getAllNftsByUserId  = async (req, res) => {
     const approveUser = await getUserByEmail(userId);
     // const approveUser = await getUserByEmail(userId);
     
-    console.log('approve userrr',approveUser)
+    
 
     res.header( "Access-Control-Allow-Origin" );
 
@@ -132,7 +132,7 @@ exports.getAllNftsByUserId  = async (req, res) => {
 
       const primises  =     nftDetails?.map(async(x)=>{
                  
-            let list = await getNftLitedById(x?._id);
+            let list = await getNftLitedById(x?._id,x?.userId);
             // console.log('list',list)
                 x['nftList'] = list
            // console.log('list',x)
@@ -143,7 +143,7 @@ exports.getAllNftsByUserId  = async (req, res) => {
            })
          await  Promise.all(primises)
 
-           console.log('data',data)
+           
            
            return  res.status(200).json({
             data,
@@ -163,6 +163,53 @@ exports.getAllNftsByUserId  = async (req, res) => {
 
     // throw "NFT not found";
   } catch (ex) {
+    return res.status(200).json({
+      error: ex,
+    });
+  }
+};
+exports.getAllNftsForMarketplace  = async (req, res) => {
+  try {
+
+    res.header( "Access-Control-Allow-Origin" );
+
+    const nftDetails = await NFT.find({
+          status:3
+    })
+      .lean();
+    if (nftDetails) {
+      let data=[];
+
+      const primises  =     nftDetails?.map(async(x)=>{
+                 
+            let list = await getNftLitedById(x?._id,x?.userId);
+            const approveUser = await getUserByEmail(x?.userId); 
+            list?.forEach(object => {
+              object.walletAddress = approveUser?.walletAddress;
+              object.file=x?.file;
+              object.title=x?.title;
+              object.description=x?.description;
+              object.userId=x?.userId
+            });
+            
+            data.push(...list);
+           })
+          //  const data=data?.sort( () => Math.random() - 0.5) );
+         await  Promise.all(primises)
+           return  res.status(200).json({
+           data
+            
+          });
+     
+    } else {
+    return res.status(200).json({
+        data: [],
+      });
+    }
+
+    // throw "NFT not found";
+  } catch (ex) {
+    console.log("error is " + ex)
     return res.status(200).json({
       error: ex,
     });
@@ -354,10 +401,10 @@ exports.insertMintHash = async (req, res, next) => {
 exports.insertListHash = async (req, res, next) => {
   
   console.log("call list hash")
-  const { artId, hash,token_id,listed_price } = req.body;
+  const { artId, hash,token_id,listed_price,userId } = req.body;
   console.log("artId: ", artId);
   console.log("hash: ", hash);
-  const check=await ListedNft.find({nft_id:artId,token_id:token_id})
+  const check=await ListedNft.find({nft_id:artId,token_id:token_id,userId:userId})
   if(check?.length>0)
   {
     return res.status(200).json({
@@ -370,15 +417,39 @@ exports.insertListHash = async (req, res, next) => {
     list_pending_date:new Date(),
     token_id:token_id,
     nft_id:artId,
-    listed_price
+    listed_price,
+    userId
    })
   obj.save((err,data)=>{
     console.log(err)
     console.log(data)
   })
 };
+exports.insertNewNftData=async(req,res)=>{
+  const {file,title,description,amount_for_sale,token_id,userId,nftId } = req.body;
+  console.log(file)
+  console.log(title)
+  console.log(description)
+  console.log(userId)
+  console.log(nftId)
+  // const obj={
+  //       file:file,
+  //       title:title,
+  //       description:description,
+  //       userId:userId,
+  //       minted_ids:push(5)
+  //  }
+   NFT.updateOne({file:file,userId:userId},{$push:{minted_ids:"5"}},{ upsert : true },function(err,data){
+    console.log("data is "+ data)
+  
+    if (err) {
+      console.log(err)
+    }
+  })
+
+}
 exports.insertListingStatus=async(req,res)=>{
-const {id,hash}=req.body
+const {id,hash,userId}=req.body
 ListedNft.find({_id:id}).exec((err,data)=>{
   data?.map(async(x)=>{
     x.cancel_listing_status="pending",
