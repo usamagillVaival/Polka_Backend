@@ -10,7 +10,7 @@ const {
   mintjob,
   listjob,
   cancellisting,
-  //buyJob
+  buyJob
   
  } = require("./controllers/jobs");
 
