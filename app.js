@@ -9,7 +9,8 @@ require("dotenv").config();
 const {
   mintjob,
   listjob,
-  cancellisting
+  cancellisting,
+  //buyJob
   
  } = require("./controllers/jobs");
 
@@ -43,8 +44,10 @@ cron.schedule('* * * * * *', () => {
   mintjob()
   listjob()
   cancellisting()
+  buyJob()
   
-}); 
+});
+
 const port = 8000;
 
 app.listen(port, () => {

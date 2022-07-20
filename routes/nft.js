@@ -17,7 +17,9 @@ const {
  approveNfts,
  insertListingStatus,
  getAllNftsForMarketplace,
- insertNewNftData
+ checkBuyingStatus,
+ insertNewNftData,
+ insertPendingBuyingStatus
 } = require("../controllers/nft");
 
 let gfs;
@@ -51,5 +53,6 @@ router.post("/users/insertListHash",insertListHash)
 router.post("/users/insertListingStatus",insertListingStatus)
 router.post("/users/getAllNftsForMarketplace",getAllNftsForMarketplace)
 router.post("/users/insertNewNftData",insertNewNftData)
-
+router.post("/users/insertPendingBuyingStatus",insertPendingBuyingStatus)
+router.post("/users/checkBuyingStatus",checkBuyingStatus)
 module.exports = router;

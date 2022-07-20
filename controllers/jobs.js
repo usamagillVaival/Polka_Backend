@@ -97,7 +97,7 @@ exports.listjob  = async () => {
              
                 x.list_status="listed";
                 x.list_confirm_date=new Date()
-                
+                x.status=1
                 x.save((err, user) => {
                   if (err) {
                     console.log(err);
@@ -165,6 +165,58 @@ exports.cancellisting  = async () => {
              }
            } else {
              console.log(`transaction ${x?.list_hash} not processed yet.`);
+           }
+         });
+         
+        
+     });
+  });
+}
+exports.buyJob  = async () => {
+  
+  ListedNft.find({
+    buying_status: "pending",
+  }).exec((err, data) => {
+    
+    data?.map(async (x) => {
+      
+      console.log("buy nft  job running")
+        let hash = x.buying_hash;
+        await web3.eth.getTransactionReceipt(hash, function (err, receipt) {
+         
+          if (err) {
+            console.log(err);
+          }
+          if (receipt !== null && receipt !== undefined) {
+            if (receipt.status == true) {
+              x.buying_status="bought"
+              x.status=2
+              NFT.findOneAndUpdate({_id:x?.nft_id},
+              { $pull: { "minted_ids.0" : `${x?.token_id}` } }, (err,data) => {
+                
+                  if (err) {
+                    console.log(err)
+                      
+                  }
+                })
+                x.save()
+            }
+             else if (receipt.status == false) {
+              x.buying_status=""
+              x.buying_hash=""
+              x.buying_wallet_address=""
+              x.buyer_user_id=""
+              x.status=1
+              x.save((err, user) => {
+                if (err) {
+                  console.log(err);
+                 } else {
+                   // console.log(user);
+                 }
+               });
+             }
+           } else {
+             console.log(`transaction ${x?.buying_hash} not processed yet.`);
            }
          });
          
