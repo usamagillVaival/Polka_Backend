@@ -415,7 +415,7 @@ exports.insertListHash = async (req, res, next) => {
   const { artId, hash,token_id,listed_price,userId } = req.body;
   console.log("artId: ", artId);
   console.log("hash: ", hash);
-  const check=await ListedNft.find({nft_id:artId,token_id:token_id,userId:userId})
+  const check=await ListedNft.find({nft_id:artId,token_id:token_id,userId:userId,status:1})
   if(check?.length>0)
   {
     return res.status(200).json({
@@ -432,8 +432,10 @@ exports.insertListHash = async (req, res, next) => {
     userId
    })
   obj.save((err,data)=>{
-    console.log(err)
-    console.log(data)
+    return res.json({
+      message:err?err:data
+    })
+    
   })
 };
 exports.insertNewNftData=async(req,res)=>{
