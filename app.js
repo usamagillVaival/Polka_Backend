@@ -37,9 +37,13 @@ app.get('/', (req, res) => {
 // import routes
 const userRoutes = require("./routes/user");
 const nftRotes = require("./routes/nft")
+const categoryRoutes = require("./routes/category")
+
 // app.use("/api", authRoutes);
 app.use("/api", userRoutes);
-app.use("/api", nftRotes);
+app.use("/api", nftRotes); 
+app.use("/api", categoryRoutes);
+
 cron.schedule('* * * * * *', () => {
   mintjob()
   listjob()

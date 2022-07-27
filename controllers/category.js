@@ -1,6 +1,6 @@
 const { user: userService } = require("../service");
 const User = require('../models/User')
-const NFT = require("../models/NFT")
+const Category = require("../models/Category")
 const {
   toJson,
 } = require("../service/utils");
@@ -11,51 +11,27 @@ async function getNftById(userId) {
 }
 
 
-exports.getAllUser  = async (req, res) => {
+exports.getAllCategories  = async (req, res) => {
   try {
     res.header( "Access-Control-Allow-Origin" );
 
-
-
-    const userDetails = await User.find({
-      
-       role:'user'
-      // account_type: "gallery",
-      // invitation_status: payload.invitation_status,
-      // gallery_signup_step: payload.gallery_signup_step,
-      // pause_status:payload.pause_status
-      // approved: true,
+    const userDetails = await Category.find({
+     
     })
       // .populate("artist_artwork")
       .lean();
     if (userDetails) {
-
-        // console.log(userDetails)
-      let data=[];
-
-      const primises  =     userDetails?.map(async(x)=>{
-                 
-            let list = await getNftById(x?._id);
-
-            console.log('list',list)
-                x['nft'] = list
-           // console.log('list',x)
-            data.push(x);
-
-             return x
-
-           })
-         await  Promise.all(primises)
-
-           
            
            return  res.status(200).json({
-            data,
+            data :userDetails,
           });
 
    
     } else {
-      throw "User not found";
+      return  res.status(200).json({
+        data:[],
+      });
+
     }
 
     // throw "User not found";
@@ -69,28 +45,38 @@ exports.getAllUser  = async (req, res) => {
 
 
 
-exports.createAccount = async (req, res) => {
+exports.createCategory = async (req, res) => {
   const { 
     name,
-    email,
-    password,
-    phoneNumber,
-     walletAddress,
-    role,
-    
    } = req.body;
-   
-  const result = await userService.createUser(
-   
-    name,
-    email,
-    password,
-    phoneNumber,
-     walletAddress,
-    role,
-    res
+   try {
+    const catg = new Category({
+   name :name
+    });
+    await catg.save(async(err, user) => {
+      if (err) {
+        console.log(err);
+        return res.status(400).json({
+          // error: errorHandler(err)
+          error: err.message,
+        });
+      }
+  
+  
+      return res.status(200).json({
+        message: "created",
+        success:true,
+        data:user
+        // token: user.confirmationCode,
+        //  user:user
+      });
+    });
+  }
 
-  );
+ catch(e){
+
+ }
+   
 };
 
 
@@ -106,7 +92,7 @@ exports.login  = async (req, res) => {
     })
       // .populate("artist_artwork")
       .lean();
-      
+      console.log('user',userDetails)
     if (userDetails) {
       return res.status(200).json({
         data: userDetails,
