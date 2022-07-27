@@ -10,6 +10,10 @@ module.exports = ({ User, authHelper }) => {
     const user = await User.findOne({ email }, (err, user) => {});
     return toJson(user);
   }
+  async function getUserByWalletAddress(walletAddress){
+    const user = await User.findOne({ walletAddress }, (err, user) => {});
+    return toJson(user);
+  }
   async function getUserByName(name) {
     const user = await User.findOne(
       { name },
@@ -39,9 +43,9 @@ module.exports = ({ User, authHelper }) => {
       res
     });
     await user.save(async(err, user) => {
-    console.log('save')
+    
       if (err) {
-        console.log(err);
+        
         return res.status(400).json({
           // error: errorHandler(err)
           error: err.message,
@@ -77,12 +81,18 @@ module.exports = ({ User, authHelper }) => {
   ) => {
     try {
       const approveUser = await getUserByEmail(email);
-         console.log('approve userrr',approveUser)
+         
       
 
       if (approveUser) {
         return res.status(200).json({
           error: "This Email Already Exist ",
+        });
+      }
+      const walletCheck=await getUserByWalletAddress(walletAddress);
+      if (walletCheck) {
+        return res.status(200).json({
+          error: "This wallet address Already Exist ",
         });
       }
       

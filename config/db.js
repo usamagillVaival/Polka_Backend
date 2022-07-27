@@ -23,9 +23,8 @@ const connectDB = async () => {
     });
     gfs = await Grid(mongoose.connection.db, mongoose.mongo);
     await gfs.collection("uploads"); // this will create chunks and files with uploads.chunks and upload.files
-    console.log("MongoDB Connected....");
-    // getPastEvent();
-    //  verifyUser()
+    console.log("Db connected successfully")
+   
     return gfs;
   } catch (err) {
     console.error(err.message);

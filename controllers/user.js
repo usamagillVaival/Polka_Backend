@@ -45,7 +45,7 @@ exports.createAccount = async (req, res) => {
     role,
     
    } = req.body;
-   console.log('cc')
+   
   const result = await userService.createUser(
    
     name,
@@ -72,7 +72,7 @@ exports.login  = async (req, res) => {
     })
       // .populate("artist_artwork")
       .lean();
-      console.log('user',userDetails)
+      
     if (userDetails) {
       return res.status(200).json({
         data: userDetails,

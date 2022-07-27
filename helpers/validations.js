@@ -7,7 +7,7 @@ const artistProfileValidation = (req, res) => {
   //   body("biography").not().isEmpty();
   //   body("networkCategory").not().isEmpty();
   //   body("links").not().isEmpty();
-  console.log("In");
+  
 };
 
 module.exports = { artistProfileValidation };

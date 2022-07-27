@@ -19,14 +19,14 @@ exports.mintjob  = async () => {
       mint_status: "pending",
     }).exec((err, data) => {
      
-      // console.log('data',data)
+      // 
       data?.map(async (x) => {
-        console.log("mint job running")
+        
           let hash = x.mint_hash;
           await web3.eth.getTransactionReceipt(hash, function (err, receipt) {
-            console.log("receipt is " + JSON.stringify(receipt))
+            
             if (err) {
-              console.log(err);
+              
             }
             if (receipt !== null && receipt !== undefined) {
               if (receipt.status == true) {
@@ -38,7 +38,7 @@ exports.mintjob  = async () => {
                 {
                      arr.push(decodedLogs[i]?.events[2]?.value)
                 }
-                console.log("minted id" + arr)
+                
                 x.minted_ids.push(arr)
                 
                 x.status = 3;
@@ -46,7 +46,7 @@ exports.mintjob  = async () => {
                 x.nft_mint_confirmed_data=new Date()
                 x.save((err, user) => {
                   if (err) {
-                    console.log(err);
+                    
                   } else {
                    
                   }
@@ -57,14 +57,14 @@ exports.mintjob  = async () => {
                 x.failed_transaction=true
                 x.save((err, user) => {
                   if (err) {
-                    console.log(err);
+                    
                   } else {
-                    console.log(user);
+                    
                   }
                 });
               }
             } else {
-              console.log(`transaction ${x?.mint_hash} not processed yet.`);
+              
             }
           });
         
@@ -78,19 +78,19 @@ exports.listjob  = async () => {
   }).exec((err, data) => {
     
     data?.map(async (x) => {
-      console.log(x)
-      console.log("list job job running")
+      
+      
         let hash = x.list_hash;
         await web3.eth.getTransactionReceipt(hash, function (err, receipt) {
          
           if (err) {
-            console.log(err);
+            
           }
           if (receipt !== null && receipt !== undefined) {
             if (receipt.status == true) {
               
               const decodedLogs = abiDecoder1.decodeLogs(receipt.logs);
-              console.log("decoded logs" + decodedLogs[0].events[1].value)
+              
               if(decodedLogs[0].events[1].value)
               {
                 x.index_hash=decodedLogs[0].events[1].value
@@ -100,9 +100,9 @@ exports.listjob  = async () => {
                 x.status=1
                 x.save((err, user) => {
                   if (err) {
-                    console.log(err);
+                    
                   } else {
-                  //  console.log(data)
+                  //  
                   }
                 });  
               }
@@ -113,14 +113,14 @@ exports.listjob  = async () => {
               x.failed_transaction=true
               x.save((err, user) => {
                 if (err) {
-                  console.log(err);
+                  
                  } else {
-                   // console.log(user);
+                   // 
                  }
                });
              }
            } else {
-             console.log(`transaction ${x?.list_hash} not processed yet.`);
+             
            }
          });
          
@@ -135,13 +135,13 @@ exports.cancellisting  = async () => {
   }).exec((err, data) => {
     
     data?.map(async (x) => {
-      console.log(x)
-      console.log("cancel listing  job running")
+      
+      
         let hash = x.cancel_listing_hash;
         await web3.eth.getTransactionReceipt(hash, function (err, receipt) {
          
           if (err) {
-            console.log(err);
+            
           }
           if (receipt !== null && receipt !== undefined) {
             if (receipt.status == true) {
@@ -149,7 +149,10 @@ exports.cancellisting  = async () => {
               
               x.delete((err,data)=>{
                  if(err)
-                 console.log(err)
+                 {
+                  
+                 }
+                 
               })
               
             }
@@ -157,14 +160,14 @@ exports.cancellisting  = async () => {
               x.cancel_listing_status = "rejected";
               x.save((err, user) => {
                 if (err) {
-                  console.log(err);
+                  
                  } else {
-                   // console.log(user);
+                   // 
                  }
                });
              }
            } else {
-             console.log(`transaction ${x?.list_hash} not processed yet.`);
+             
            }
          });
          
@@ -180,12 +183,12 @@ exports.buyJob  = async () => {
     
     data?.map(async (x) => {
       
-      console.log("buy nft  job running")
+      
         let hash = x.buying_hash;
         await web3.eth.getTransactionReceipt(hash, function (err, receipt) {
          
           if (err) {
-            console.log(err);
+            
           }
           if (receipt !== null && receipt !== undefined) {
             if (receipt.status == true) {
@@ -195,7 +198,7 @@ exports.buyJob  = async () => {
               { $pull: { "minted_ids.0" : `${x?.token_id}` } }, (err,data) => {
                 
                   if (err) {
-                    console.log(err)
+                    
                       
                   }
                 })
@@ -209,14 +212,14 @@ exports.buyJob  = async () => {
               x.status=1
               x.save((err, user) => {
                 if (err) {
-                  console.log(err);
+                  
                  } else {
-                   // console.log(user);
+                   // 
                  }
                });
              }
            } else {
-             console.log(`transaction ${x?.buying_hash} not processed yet.`);
+             
            }
          });
          

@@ -40,4 +40,4 @@ const logs =[{
 //   ]
   const decodedLogs = abiDecoder.decodeLogs(logs);
 
-  console.log("decoded logs"+ decodedLogs[0].events[1].value)
+  
