@@ -9,7 +9,8 @@ require("dotenv").config();
 const {
   mintjob,
   listjob,
-  cancellisting
+  cancellisting,
+  buyJob
   
  } = require("./controllers/jobs");
 
@@ -36,18 +37,24 @@ app.get('/', (req, res) => {
 // import routes
 const userRoutes = require("./routes/user");
 const nftRotes = require("./routes/nft")
+const categoryRoutes = require("./routes/category")
+
 // app.use("/api", authRoutes);
 app.use("/api", userRoutes);
-app.use("/api", nftRotes);
+app.use("/api", nftRotes); 
+app.use("/api", categoryRoutes);
+
 cron.schedule('* * * * * *', () => {
   mintjob()
   listjob()
   cancellisting()
+  buyJob()
   
-}); 
+});
+
 const port = 8000;
 
 app.listen(port, () => {
-  console.log(`Server is running on port ${port}`);
+  
 });
    

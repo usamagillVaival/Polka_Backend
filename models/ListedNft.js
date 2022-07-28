@@ -45,7 +45,28 @@ cancel_listing_hash:{
 userId:{
   type:String,
   trim:true
+},
+buying_status:{
+  type:String,
+  trim:true
+},
+status:{
+  type:String,
+  trim:true
+},
+buying_hash:{
+  type:String,
+  trim:true
+},
+buyer_user_id:{
+  type:String,
+  trim:true
+},
+buying_wallet_address:{
+  type:String,
+  trim:true
 }
+
   },
   { timestamps: true }
 

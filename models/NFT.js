@@ -31,6 +31,10 @@ const nftSchema = new mongoose.Schema(
       type: String,
       trim: true,
     },
+    category:{
+      type: String,
+      trim: true,
+    },
 
     buying_hash:{
       type: String,

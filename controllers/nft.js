@@ -16,9 +16,20 @@ async function getUserByEmail(email) {
   const user = await User.findOne({ _id:email }, (err, user) => {});
   return toJson(user);
 }
-
+async function testing()
+{
+  NFT.findOneAndUpdate({ file:"55e75e2729d448d622a36eea623ac015.jpg",userId:"62c2e98e29634c49418fbdaa"},
+    { $pull: { "minted_ids.0" : "78"  } }, (err,data) => {
+      
+        if (err) {
+          
+            
+        }
+    }
+);
+} 
 async function getNftLitedById(id,userId) {
-  const user = await ListedNft.find({ nft_id:id,list_status:"listed",userId:userId }, (err, user) => {});
+  const user = await ListedNft.find({ nft_id:id,list_status:"listed",userId:userId,status:1 }, (err, user) => {});
   return toJson(user);
 }
 
@@ -92,13 +103,13 @@ exports.approveNfts  = async (req, res) => {
         {"status": 1} // Update
     )
     .then((obj) => {
-        console.log('Updated - ' + obj);
+        
         return res.status(200).json({
           data: [],
         });
     })
     .catch((err) => {
-        console.log('Error: ' + err);
+        
     })
 
     // throw "NFT not found";
@@ -133,9 +144,9 @@ exports.getAllNftsByUserId  = async (req, res) => {
       const primises  =     nftDetails?.map(async(x)=>{
                  
             let list = await getNftLitedById(x?._id,x?.userId);
-            // console.log('list',list)
+            // 
                 x['nftList'] = list
-           // console.log('list',x)
+           // 
             data.push(x);
 
              return x
@@ -152,7 +163,7 @@ exports.getAllNftsByUserId  = async (req, res) => {
       
 
 
-      //  console.log('list',list)
+      //  
 
      
     } else {
@@ -209,7 +220,7 @@ exports.getAllNftsForMarketplace  = async (req, res) => {
 
     // throw "NFT not found";
   } catch (ex) {
-    console.log("error is " + ex)
+    
     return res.status(200).json({
       error: ex,
     });
@@ -257,7 +268,11 @@ exports.createNFT = async (req, res) => {
     price,
     amount_for_sale,
     userId, 
+    category
+
+    
    } = req.body;
+   
    try {
     if (!req.file) {
 
@@ -294,11 +309,13 @@ exports.createNFT = async (req, res) => {
       amount_for_sale,
       userId, 
       status:0,
+      category:category
+  
     });
     await nft.save(async(err, user) => {
   
       if (err) {
-        console.log(err);
+        
         return res.status(400).json({
           // error: errorHandler(err)
           error: err.message,
@@ -425,14 +442,14 @@ exports.getIpfs = async (req, res) => {
 exports.uploadIPFS = async (req, res, next) => {
   
   const { title, description, imageurl } = req.body;
-  console.log(imageurl)
+  
   let url = "";
 
   try {
     const added = await client.add(urlSource(imageurl));
     url = `https://ipfs.infura.io/ipfs/${added.cid}`;
   } catch (error) {
-    console.log("Error uploading file: ", error);
+    
   }
 
   // const cid = await ipfs.add({ content }, {
@@ -449,18 +466,18 @@ exports.uploadIPFS = async (req, res, next) => {
   try {
     const added = await client.add(data);
     const meta = `https://ipfs.infura.io/ipfs/${added.path}`;
-    console.log(meta);
+    
     res.json(meta);
   } catch (error) {
-    console.log("Error uploading file: ", error);
+    
   }
 };
 
 exports.insertMintHash = async (req, res, next) => {
-  console.log("call mint hash")
+  
   const { artId, hash } = req.body;
-  console.log("artId: ", artId);
-  console.log("hash: ", hash);
+  
+  
 
   NFT.findOne({ _id: artId }, async (err, nft) => {
     if (err || !nft) {
@@ -475,7 +492,7 @@ exports.insertMintHash = async (req, res, next) => {
     }
     nft.save((err, updatedUser) => {
       if (err) {
-        console.log("USER UPDATE ERROR", err);
+        
         return res.status(400).json({
           error: "User update failed",
         });
@@ -486,11 +503,11 @@ exports.insertMintHash = async (req, res, next) => {
 };
 exports.insertListHash = async (req, res, next) => {
   
-  console.log("call list hash")
+  
   const { artId, hash,token_id,listed_price,userId } = req.body;
-  console.log("artId: ", artId);
-  console.log("hash: ", hash);
-  const check=await ListedNft.find({nft_id:artId,token_id:token_id,userId:userId})
+  
+  
+  const check=await ListedNft.find({nft_id:artId,token_id:token_id,userId:userId,status:1})
   if(check?.length>0)
   {
     return res.status(200).json({
@@ -507,30 +524,46 @@ exports.insertListHash = async (req, res, next) => {
     userId
    })
   obj.save((err,data)=>{
-    console.log(err)
-    console.log(data)
+    return res.json({
+      message:err?err:data
+    })
+    
   })
 };
 exports.insertNewNftData=async(req,res)=>{
-  const {file,title,description,amount_for_sale,token_id,userId,nftId } = req.body;
-  console.log(file)
-  console.log(title)
-  console.log(description)
-  console.log(userId)
-  console.log(nftId)
-  // const obj={
-  //       file:file,
-  //       title:title,
-  //       description:description,
-  //       userId:userId,
-  //       minted_ids:push(5)
-  //  }
-   NFT.updateOne({file:file,userId:userId},{$push:{minted_ids:"5"}},{ upsert : true },function(err,data){
-    console.log("data is "+ data)
+  const {file,title,description,amount_for_sale,userId,nftId,token_id } = req.body;
   
-    if (err) {
-      console.log(err)
-    }
+   const getdata=await NFT.find({file:file,userId:userId})
+  let array=[]
+  let arry=getdata[0]?.minted_ids[0]
+  for(var i=0;i<arry?.length;i++)
+  {
+    array?.push(arry[i])
+  }
+  
+  
+  array?.push(token_id)
+  
+  
+  
+  
+  
+  
+  const obj={
+        file:file,
+        title:title,
+        description:description,
+        userId:userId,
+        minted_ids:[array],
+        amount_for_sale:array?.length,
+        status:3
+   }
+   NFT.updateOne({file:file,userId:userId},obj,{ upsert : true },function(err,data){
+    
+      return res.status(200).json({
+        success:"Document added"
+      })
+    
   })
 
 }
@@ -547,6 +580,52 @@ ListedNft.find({_id:id}).exec((err,data)=>{
     })
   })
 })
+}
+exports.checkBuyingStatus=async(req,res)=>{
+  const {nft_id,userId,token_id }=req.body
+  ListedNft.find({nft_id:nft_id,userId:userId,token_id:token_id}).exec((err,data)=>{
+    if(data[0]?.buying_status=="pending")
+    {
+      return res.json({
+        error:"Nft already in selling state"
+      })
+    }
+    else
+    {
+      return res.json({
+        success:"ok"
+      })
+    }
+  })
+}
+exports.insertPendingBuyingStatus=async(req,res)=>{
+  const {userId,nftId,tokenId,hash,buyer_user_id,buying_wallet_address}=req.body
+  
+  
+  
+  ListedNft.find({userId:userId,nft_id:nftId,token_id:tokenId}).exec((err,data)=>{
+    
+    data?.map(async(x)=>{
+        x.buying_status="pending"
+        x.buying_hash=hash
+        x.buyer_user_id=buyer_user_id
+        x.buying_wallet_address=buying_wallet_address
+        x.save((err,data)=>{
+          if(err)
+          {
+            return res.status(400).json({
+              error:err
+            })
+          }
+          
+        })
+       
+
+    })
+    return res.status(200).json({
+      success:"pending status added."
+    })
+  })
 }
 exports.getallidsofnft=async (req,res)=>{
   // const {_id}=req.body
