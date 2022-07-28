@@ -53,7 +53,10 @@ const nftSchema = new mongoose.Schema(
       type:Array,
       trim:true
     },
-   
+   nft_type:{
+    type: String,
+    trim: true,
+   }
     
     
     

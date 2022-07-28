@@ -250,22 +250,14 @@ exports.viewProfile = (req, res) => {
 };
 
 
-
-
-
-
 exports.createNFT = async (req, res) => {
   const { 
-   
     title,
     description,
     price,
     amount_for_sale,
     userId, 
-
-    
    } = req.body;
-   console.log('kk')
    try {
     if (!req.file) {
 
@@ -301,8 +293,7 @@ exports.createNFT = async (req, res) => {
       price,
       amount_for_sale,
       userId, 
-      status:0
-  
+      status:0,
     });
     await nft.save(async(err, user) => {
   
@@ -313,11 +304,6 @@ exports.createNFT = async (req, res) => {
           error: err.message,
         });
       }
-  
-    
-  
-  
-  
       return res.status(200).json({
         message: "created",
         success:true,
@@ -334,6 +320,106 @@ exports.createNFT = async (req, res) => {
    
 };
 
+exports.getIpfs = async (req, res) => {
+  console.log("get IPFS");
+  const { 
+    title,
+    description,
+    price,
+    amount_for_sale,
+    userId, 
+    nft_type
+   } = req.body;
+   try {
+    if (!req.file) {
+
+      return res.status(200).json({
+        message: "Failed to upload file",
+        success:false
+      
+        // token: user.confirmationCode,
+        //  user:user
+      });
+    }
+
+    if (!userId) {
+      return res.status(200).json({
+        message: "UserId is required",
+        success:false
+      
+        // token: user.confirmationCode,
+        //  user:user
+      });
+
+    }
+
+    const {filename} = req.file
+
+    let url = "";
+
+    const imageurl = `http://194.5.193.238:8000/api/users/nft_image/${filename}`
+  try {
+    const added = await client.add(urlSource(imageurl));
+    url = `https://ipfs.infura.io/ipfs/${added.cid}`;
+  } catch (error) {
+    console.log("Error uploading file: ", error);
+  }
+
+  // const cid = await ipfs.add({ content }, {
+  //   cidVersion: 1,
+  //   hashAlg: 'sha2-256'
+  // }
+
+  const data = JSON.stringify({
+    name: title,
+    description,
+    image: url,
+  });
+
+  try {
+    const added = await client.add(data);
+    const meta = `https://ipfs.infura.io/ipfs/${added.path}`;
+    console.log(meta);
+    const nft = new NFT({
+      file:filename, 
+      title,
+      description,
+      price,
+      amount_for_sale,
+      userId, 
+      status:0,
+      nft_type
+    });
+    await nft.save(async(err, user) => {
+  
+      if (err) {
+        console.log(err);
+        return res.status(400).json({
+          // error: errorHandler(err)
+          error: err.message,
+        });
+      }
+      console.log(user)
+      return res.status(200).json({
+        message: "created",
+        success:true,
+        data:user,
+        ipfs_url:meta
+        // token: user.confirmationCode,
+        //  user:user
+      });
+    });
+  } catch (error) {
+    console.log("Error uploading file: ", error);
+  }
+
+  }
+
+ catch(e){
+
+ }
+   
+};
 
 
 exports.uploadIPFS = async (req, res, next) => {

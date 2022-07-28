@@ -7,6 +7,7 @@ const { upload } = require("../config/multer");
 const {
  getAllNfts,
  createNFT,
+ getIpfs,
  getAllNftsByUserId,
  viewProfile,
  uploadIPFS,
@@ -37,6 +38,7 @@ const addingGFS = async (req, res, next) => {
 const router = express.Router();
 
 router.post("/users/createNFT",upload.single("file"), createNFT);
+router.post("/users/getIpfs",upload.single("file"), getIpfs);
 router.post("/users/getNftByStatus", getAllNfts);
 router.post("/users/getNfts", getNfts);
 router.post("/users/approveNfts", approveNfts);
