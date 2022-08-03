@@ -1,7 +1,7 @@
 const NFT = require('../models/NFT')
 const ListedNft=require('../models/ListedNft')
 var Web3 = require('web3');
-var provider = process.env.HTTP_NODE;
+var provider = "https://data-seed-prebsc-1-s1.binance.org:8545/"
 var web3Provider = new Web3.providers.HttpProvider(provider);
 var web3 = new Web3(web3Provider);
 var abi=require("../abis/abi.json")
