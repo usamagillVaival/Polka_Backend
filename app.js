@@ -52,7 +52,7 @@ cron.schedule('* * * * * *', () => {
   
 });
 
-const port = 8000;
+let port = process.env.PORT || 3000;
 
 app.listen(port, () => {
   
