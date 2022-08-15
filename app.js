@@ -38,11 +38,12 @@ app.get('/', (req, res) => {
 const userRoutes = require("./routes/user");
 const nftRotes = require("./routes/nft")
 const categoryRoutes = require("./routes/category")
-
+const wallet = require("./routes/wallet")
 // app.use("/api", authRoutes);
 app.use("/api", userRoutes);
 app.use("/api", nftRotes); 
 app.use("/api", categoryRoutes);
+app.use("/api", wallet);
 
 cron.schedule('* * * * * *', () => {
   mintjob()
@@ -52,7 +53,7 @@ cron.schedule('* * * * * *', () => {
   
 });
 
-let port = process.env.PORT || 3000;
+let port = process.env.PORT || 3003;
 
 app.listen(port, () => {
   
