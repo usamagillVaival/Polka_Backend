@@ -22,6 +22,7 @@
     "crypto": "^1.0.1",
     "crypto-js": "^4.1.1",
     "dotenv": "^8.0.0",
+    "elysium-sdk": "^0.0.44",
     "express": "^4.16.4",
     "express-jwt": "^5.3.1",
     "express-validator": "^5.3.1",
@@ -37,7 +38,7 @@
     "multer": "^1.4.4",
     "multer-gridfs-storage": "^5.0.2",
     "node-cron": "^3.0.0",
-    "nodemailer": "^6.7.2",
+    "nodemailer": "^6.7.8",
     "nodemailer-sendgrid": "^1.0.3",
     "nodemon": "^1.19.4",
     "path": "^0.12.7",
@@ -48,8 +49,7 @@
     "stripe": "^8.202.0",
     "uuid": "^3.3.2",
     "web3": "^1.6.1"
-  }
-   ,
+  },
   "engines": {
     "node": "16.14.2"
   }

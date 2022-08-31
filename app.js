@@ -5,12 +5,16 @@ const bodyParser = require("body-parser");
 const cookieParser = require("cookie-parser");
 const cors = require("cors");
 const expressValidator = require("express-validator");
+const  ElysiumSDK  = require('elysium-sdk');
+
+
 require("dotenv").config();
 const {
   mintjob,
   listjob,
   cancellisting,
-  buyJob
+  buyJob,
+  rewardsJob
   
  } = require("./controllers/jobs");
 
@@ -39,17 +43,22 @@ const userRoutes = require("./routes/user");
 const nftRotes = require("./routes/nft")
 const categoryRoutes = require("./routes/category")
 const wallet = require("./routes/wallet")
+const month = require("./routes/months")
 // app.use("/api", authRoutes);
 app.use("/api", userRoutes);
 app.use("/api", nftRotes); 
 app.use("/api", categoryRoutes);
+app.use("/api", month);
 app.use("/api", wallet);
+  
+
 
 cron.schedule('* * * * * *', () => {
   mintjob()
   listjob()
   cancellisting()
   buyJob()
+    rewardsJob()
   
 });
 
